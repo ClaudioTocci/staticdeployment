@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Teachable Machine Image Model</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Teachable Machine</title>
 
 <style>
     body {
@@ -29,12 +29,13 @@
 <div id="webcam-container"></div>
 <div id="label-container"></div>
 
-<!-- LOAD LIBRARIES -->
+<!-- TensorFlow -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
+
+<!-- STABLE Teachable Machine version -->
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
 <script>
-// IMPORTANT: Folder must match your repo structure
 const URL = "my_model/";
 
 let model, webcam, labelContainer, maxPredictions;
@@ -50,7 +51,6 @@ async function init() {
 
     console.log("Model loaded!");
 
-    // Setup webcam
     const flip = true;
     webcam = new tmImage.Webcam(200, 200, flip);
     await webcam.setup();
@@ -60,7 +60,6 @@ async function init() {
 
     document.getElementById("webcam-container").appendChild(webcam.canvas);
 
-    // Create labels
     labelContainer = document.getElementById("label-container");
     labelContainer.innerHTML = "";
 
