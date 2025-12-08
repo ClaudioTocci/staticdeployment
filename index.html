@@ -29,11 +29,13 @@
 <div id="webcam-container"></div>
 <div id="label-container"></div>
 
+<!-- LOAD LIBRARIES -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
 
 <script>
-const URL = "http://127.0.0.1:5500/my_model/";
+// IMPORTANT: Folder must match your repo structure
+const URL = "my_model/";
 
 let model, webcam, labelContainer, maxPredictions;
 
@@ -48,6 +50,7 @@ async function init() {
 
     console.log("Model loaded!");
 
+    // Setup webcam
     const flip = true;
     webcam = new tmImage.Webcam(200, 200, flip);
     await webcam.setup();
@@ -57,6 +60,7 @@ async function init() {
 
     document.getElementById("webcam-container").appendChild(webcam.canvas);
 
+    // Create labels
     labelContainer = document.getElementById("label-container");
     labelContainer.innerHTML = "";
 
