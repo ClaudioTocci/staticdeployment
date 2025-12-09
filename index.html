@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teachable Machine Image Model</title>
+    <title>Teachable Machine Color Changer</title>
+    <style>
+        body {
+            transition: background-color 0.3s ease;
+        }
+    </style>
 </head>
-<body style="background:white; transition: background-color 0.3s;">
-<div>Teachable Machine Image Model</div>
-<button type="button" onclick="init()">Start</button>
+
+<body>
+<h2>Teachable Machine Image Model</h2>
+<button onclick="init()">Start</button>
+
 <div id="webcam-container"></div>
 <div id="label-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
-<script type="text/javascript">
-    // the link to your model provided by Teachable Machine export panel
+<script>
     const URL = "./my_model/";
 
-    let model, webcam, labelContainer, maxPredictions;
+    let model, webcam, labelContainer;
 
-    // Load the image model and set up the webcam
     async function init() {
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
 
         model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
 
-        const flip = true;
-        webcam = new tmImage.Webcam(200, 200, flip);
+        webcam = new tmImage.Webcam(200, 200, true);
         await webcam.setup();
         await webcam.play();
         window.requestAnimationFrame(loop);
@@ -42,11 +45,10 @@
         window.requestAnimationFrame(loop);
     }
 
-    // Run the webcam image through the model
     async function predict() {
         const prediction = await model.predict(webcam.canvas);
 
-        // Determine the highest-probability class
+        // Find highest probability class
         let best = prediction[0];
         for (let i = 1; i < prediction.length; i++) {
             if (prediction[i].probability > best.probability) {
@@ -54,21 +56,24 @@
             }
         }
 
-        // Update prediction display
+        // Show label + probability
         labelContainer.innerHTML = best.className + ": " + best.probability.toFixed(2);
 
-        // Change background color based on detected object
-        if (best.className === "Banana" && best.probability > 0.70) {
+        // DEBUG: see actual class names in GitHub Pages
+        console.log("Detected:", best.className);
+
+        // UNIVERSAL DYNAMIC MAPPING:
+        // Works even when GitHub Pages renames classes (e.g., "Class 1")
+        const name = best.className.toLowerCase();
+
+        if (name.includes("banana")) {
             document.body.style.backgroundColor = "yellow";
-        } 
-        else if (best.className === "Apple" && best.probability > 0.70) {
+        } else if (name.includes("apple")) {
             document.body.style.backgroundColor = "red";
-        } 
-        else {
+        } else {
             document.body.style.backgroundColor = "white";
         }
     }
 </script>
-
 </body>
 </html>
