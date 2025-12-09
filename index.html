@@ -48,7 +48,7 @@
     async function predict() {
         const prediction = await model.predict(webcam.canvas);
 
-        // Find highest probability class
+        
         let best = prediction[0];
         for (let i = 1; i < prediction.length; i++) {
             if (prediction[i].probability > best.probability) {
@@ -56,14 +56,13 @@
             }
         }
 
-        // Show label + probability
+        // label + probability
         labelContainer.innerHTML = best.className + ": " + best.probability.toFixed(2);
 
-        // DEBUG: see actual class names in GitHub Pages
+        // DEBUG: 
         console.log("Detected:", best.className);
 
-        // UNIVERSAL DYNAMIC MAPPING:
-        // Works even when GitHub Pages renames classes (e.g., "Class 1")
+        
         const name = best.className.toLowerCase();
 
         if (name.includes("banana")) {
